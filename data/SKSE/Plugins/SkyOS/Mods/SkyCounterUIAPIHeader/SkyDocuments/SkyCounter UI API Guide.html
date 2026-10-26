@@ -1,0 +1,59 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SkyCounter UI API Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#0d141a;--panel:#16212a;--line:#38505d;--text:#e8eef2;--muted:#adbdc7;--cyan:#72d9e5;--gold:#e9c47b}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 0,#203747,var(--bg) 60%);color:var(--text);font:15px/1.65 "Segoe UI",Arial,sans-serif}main{max-width:1080px;margin:30px auto;padding:0 20px 50px}.hero{min-height:210px;display:flex;align-items:center;gap:20px;padding:28px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(90deg,#0b1319e8,#0d161de6),url("../banner.png") center/cover}.hero img{width:82px;height:82px;object-fit:contain}.eyebrow{color:var(--gold);font:700 10px Consolas,monospace;letter-spacing:.16em}h1{margin:5px 0;font-size:clamp(30px,5vw,46px)}h2{margin-top:0;color:var(--gold);font-size:22px}h3{color:var(--cyan);font-size:16px}section{margin-top:14px;padding:22px;border:1px solid #ffffff1c;border-radius:11px;background:#15212adf}p,li{color:var(--muted)}code,pre{font-family:Consolas,monospace}code{color:#a7edf2}pre{overflow:auto;padding:15px;border:1px solid var(--line);border-radius:8px;background:#0a1116;color:#dce8ed;font-size:12px}.note{padding:12px;border-left:3px solid var(--gold);background:#e7bd6c12;color:var(--muted)}table{width:100%;border-collapse:collapse}td,th{padding:9px;border-bottom:1px solid #ffffff18;text-align:left;vertical-align:top}th{color:var(--cyan)}footer{text-align:center;color:var(--muted);font-size:12px;padding:18px}@media(max-width:650px){main{padding:0 12px}.hero{padding:18px}.hero img{width:60px;height:60px}section{padding:16px}}
+</style></head><body><main>
+<header class="hero"><img src="../logo.png" alt="SkyCounter UI"><div><p class="eyebrow">MODDER REFERENCE · C ABI VERSION 1</p><h1>SkyCounter UI API</h1><p>Read recent pickup and location-discovery records as JSON snapshots from native plugins through a read-only C ABI.</p></div></header>
+<section><h2>What the API exposes</h2><p>The version 1 header provides a dynamic C ABI for read-only snapshots. It does not expose internal C++ types, renderer control, PrismaUI views, or game-thread event sinks. If SkyCounter UI is absent, your mod should continue without this optional integration.</p><ul><li>Recent pickup records retained by the module (up to its current stream limit).</li><li>Recent location discovery/capture records retained by the module.</li><li>UTF-8 JSON copied into caller-owned buffers.</li></ul><p class="note">Snapshot indices are not persistent IDs. Re-read the count and fetch again after the stream changes. Treat JSON as extensible: ignore unknown properties.</p></section>
+<section><h2>Connect once during plugin initialization</h2><pre>#include &lt;windows.h&gt;
+#include "SkyCounterUIAPI.h"
+
+SkyCounterUIAPI g_counter{};
+
+bool ConnectSkyCounterUI()
+{
+    const HMODULE module = GetModuleHandleW(L"SkyCounterUI.dll");
+    return SkyCounterUI_LoadAPI(module, &amp;g_counter) != 0;
+}</pre><p>The game must have loaded SkyCounter UI before the lookup. Resolve the API when your plugin initializes after SKSE loads plugins. Keep your feature optional if the module is not installed.</p></section>
+<section><h2>Copy one JSON record</h2><pre>std::string ReadPickup(uint32_t index)
+{
+    const uint32_t needed = g_counter.copyRecentPickupJsonAt(index, nullptr, 0);
+    if (!needed || needed &gt; 65536) return {};
+    std::string json(needed, '\0');
+    if (g_counter.copyRecentPickupJsonAt(index, json.data(), needed) != needed) return {};
+    json.resize(needed - 1); // exclude terminating NUL
+    return json;
+}
+
+void ReadRecentPickups()
+{
+    if (!g_counter.getRecentPickupCount) return;
+    const uint32_t count = g_counter.getRecentPickupCount();
+    for (uint32_t i = 0; i &lt; count; ++i) {
+        const auto json = ReadPickup(i);
+        if (json.empty()) continue;
+        // Parse as UTF-8 JSON with your preferred JSON library.
+    }
+}</pre><p>The copy functions return required capacity including the NUL terminator. Pass a null buffer and zero capacity for the size query, allocate that many bytes, then call again. A zero return means the index is no longer present or is invalid. The same pattern applies to <code>copyRecentLocationJsonAt</code>.</p></section>
+<section><h2>API function reference and record fields</h2><table><thead><tr><th>Function</th><th>Purpose</th></tr></thead><tbody><tr><td><code>getAPIVersion()</code></td><td>Returns API version 1.</td></tr><tr><td><code>getRecentPickupCount()</code></td><td>Current recent pickup record count.</td></tr><tr><td><code>copyRecentPickupJsonAt(index, buffer, capacity)</code></td><td>Copies a UTF-8 JSON pickup record; returns required capacity including NUL, or zero for invalid index.</td></tr><tr><td><code>getRecentLocationCount()</code></td><td>Current recent location record count.</td></tr><tr><td><code>copyRecentLocationJsonAt(index, buffer, capacity)</code></td><td>Copies a UTF-8 JSON location record; returns required capacity including NUL, or zero for invalid index.</td></tr></tbody></table><h3>Pickup record shape</h3><pre>{
+  "item": {
+    "plugin": "Skyrim.esm",
+    "name": "Iron Sword",
+    "category": "Item",
+    "formID": "00012EB7",
+    "localFormID": "00012EB7",
+    "lastPickup": 1,
+    "discoveredNow": false,
+    "icon": "file:///..."
+  }
+}</pre><h3>Location record shape</h3><pre>{
+  "key": "Skyrim.esm|0001A2B3",
+  "plugin": "Skyrim.esm",
+  "name": "Whiterun",
+  "formID": "0001A2B3",
+  "localFormID": "0001A2B3",
+  "discoveredNow": true,
+  "image": "file:///..."
+}</pre><p>Form IDs are hexadecimal strings. Icon/image URLs can be empty when no capture exists. Snapshot accessors copy records under the module's history locks. They do not require access to Skyrim forms and can be called from a worker thread, but callers must synchronize their own parsing/UI work and handle a changing snapshot.</p></section>
+<section><h2>Mod ideas</h2><ul><li><strong>Native pickup journal:</strong> show a searchable list of recent pickups in a mod-owned native window.</li><li><strong>Collection companion:</strong> display new pickup/location captures alongside your own progression checklist.</li><li><strong>Accessibility feed:</strong> convert recent record data into a mod-owned speech or high-contrast notice.</li><li><strong>House catalog:</strong> pair discovered-location records with a mod's own custom map and location notes.</li><li><strong>Optional web companion:</strong> let your native plugin transfer copied data to your own UI. Keep all game actions in your plugin and validate input.</li></ul><p class="note">This API does not promise a continuous callback, full lifetime history, or renderer access. Use your own supported SKSE event listener if your feature needs immediate event timing or gameplay changes.</p></section>
+<section><h2>Packaging and troubleshooting</h2><ol><li>The SkyCounter UI project package includes this header and guide with the app runtime.</li><li>At runtime, SkyOS Core and SkyCounter UI must be enabled in the user's profile. Mods that use the API should treat it as optional.</li><li>To create a 7-Zip archive from this project, configure and build its Release preset, then run <code>cpack --config build/CPackConfig.cmake -G 7Z -C Release</code>.</li></ol><ul><li><strong>API lookup fails:</strong> verify <code>SkyCounterUI.dll</code> has loaded and that the version 1 exports are present.</li><li><strong>Count is zero:</strong> there may be no retained event records yet; zero is not an error.</li><li><strong>Copy returns zero:</strong> re-read count and index because the current stream may have changed.</li><li><strong>JSON fields change:</strong> ignore unknown keys and avoid assuming snapshot indices are stable.</li></ul></section>
+<footer>SkyCounter UI API Header · Version 1 · Read-only snapshot access</footer></main></body></html>

@@ -1,0 +1,10 @@
+{
+  "name": "SkyCounter UI",
+  "plugin": "SkyCounterUI.dll",
+  "requiredCore": "SkyOS.dll",
+  "eventProvider": "SkyCounterUI.dll independently listens for pickups and location discoveries, shows notices, renders item icons and location screenshots, and stores recent pickup and discovery streams per save. SkyCollection.dll is optional and reads the shared cache.",
+  "viewerModule": "Data/SKSE/Plugins/SkyOS/Mods/SkyViewer/SkyCounterUI/module.json",
+  "documents": "Data/SKSE/Plugins/SkyOS/Mods/SkyCounterUI/SkyDocuments",
+  "settingsStorage": "%LOCALAPPDATA%/SkyOS/SkyViewer/SkyCounterUI/settings.json",
+  "dataStorage": "Recent pickups and location discoveries are stored per save. Item icons are cached under Data/SKSE/Plugins/SkyOS/Mods/SkyCounterUI/Icons/. Location screenshots are cached under Data/SKSE/Plugins/SkyOS/Mods/SkyCounterUI/Locations/."
+}

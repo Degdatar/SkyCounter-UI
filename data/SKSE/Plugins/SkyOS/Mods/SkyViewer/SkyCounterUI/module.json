@@ -1,0 +1,23 @@
+{
+  "name": "SkyCounter UI",
+  "description": "Configure SkyCounter UI pickup notices and capture performance.",
+  "icon": "◉",
+  "accent": "#69dce5",
+  "requiredCore": "SkyOS.dll",
+  "appPlugin": "SkyCounterUI.dll",
+  "showInSkyApps": false,
+  "settings": [
+    { "id": "openHotkey", "group": "Keyboard shortcuts", "label": "Open SkyCounter UI settings", "type": "hotkey", "default": "", "description": "Open this module in SkyViewer." },
+    { "id": "enabled", "group": "Pickup messages", "label": "Show pickup messages", "type": "boolean", "default": true, "description": "Turn pickup notices on or off. Collection tracking continues while messages are hidden." },
+    { "id": "renderIcons", "group": "Rendering performance", "label": "Render item icons", "type": "boolean", "default": true, "description": "Turn off automatic item icon rendering whenever you want. Existing cached icons remain visible." },
+    { "id": "captureLocationScreenshots", "group": "Rendering performance", "label": "Capture location screenshots", "type": "boolean", "default": true, "description": "Capture a location image asynchronously on first discovery. Existing screenshots remain visible." },
+    { "id": "messageDesign", "group": "Message appearance", "label": "Message layout", "type": "select", "default": "relic-card", "options": [{ "value": "relic-card", "label": "Relic card" }, { "value": "loot-banner", "label": "Loot banner" }, { "value": "quest-toast", "label": "Quest toast" }, { "value": "minimal-pill", "label": "Minimal pill" }], "description": "Choose a structurally different pickup message layout." },
+    { "id": "theme", "group": "Message appearance", "label": "Color theme", "type": "select", "default": "dwemer", "options": [{ "value": "dwemer", "label": "Dwemer cyan" }, { "value": "frost", "label": "Frost" }, { "value": "imperial", "label": "Imperial gold" }, { "value": "arcane", "label": "Arcane violet" }] },
+    { "id": "position", "group": "Message appearance", "label": "Message position", "type": "select", "default": "top-center", "options": [{ "value": "top-center", "label": "Top center" }, { "value": "center-center", "label": "Center" }, { "value": "top-left", "label": "Top left" }, { "value": "top-right", "label": "Top right" }, { "value": "center-left", "label": "Center left" }, { "value": "center-right", "label": "Center right" }, { "value": "bottom-left", "label": "Bottom left" }, { "value": "bottom-center", "label": "Bottom center" }, { "value": "bottom-right", "label": "Bottom right" }] },
+    { "id": "size", "group": "Message appearance", "label": "Message size", "type": "select", "default": "standard", "options": [{ "value": "compact", "label": "Compact" }, { "value": "standard", "label": "Standard" }, { "value": "large", "label": "Large" }] },
+    { "id": "messageDurationMs", "group": "Message appearance", "label": "Display time (milliseconds)", "type": "select", "default": "1500", "options": [{ "value": "500", "label": "500 ms" }, { "value": "1000", "label": "1000 ms" }, { "value": "1500", "label": "1500 ms" }, { "value": "2000", "label": "2000 ms" }, { "value": "2500", "label": "2500 ms" }, { "value": "3000", "label": "3000 ms" }] },
+    { "id": "showItemCount", "group": "Message details", "label": "Show picked-up quantity", "type": "boolean", "default": true },
+    { "id": "showPluginName", "group": "Message details", "label": "Show source plugin", "type": "boolean", "default": true },
+    { "id": "showCategory", "group": "Message details", "label": "Show item category", "type": "boolean", "default": true }
+  ]
+}

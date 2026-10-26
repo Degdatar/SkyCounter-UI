@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SkyCounter UI</title>
+  <link rel="stylesheet" href="dashboard.css?v=20261021-counter-dashboard-1">
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <img src="../../SkyCounterUI/skycounterui-logo.png" alt="SkyCounter UI">
+      <div><p class="eyebrow">NATIVE PICKUP INTERFACE</p><h1>SkyCounter UI</h1><p>Recent item and location captures from this save.</p></div>
+    </header>
+    <section class="panel">
+      <header class="section-heading"><div><p class="eyebrow">RECENT DISCOVERIES</p><h2>Pickup stream</h2></div><span id="pickup-count" class="count">Waiting for discoveries</span></header>
+      <div id="pickup-stream" class="stream"><div class="empty">Waiting for SkyCounter UI events…</div></div>
+    </section>
+    <section class="panel">
+      <header class="section-heading"><div><p class="eyebrow">MAP MARKERS</p><h2>Location captures</h2></div><span id="location-count" class="count">0 locations</span></header>
+      <div id="location-stream" class="locations"><div class="empty">Newly discovered locations appear here.</div></div>
+    </section>
+  </main>
+  <script src="dashboard.js?v=20261021-counter-dashboard-1"></script>
+</body>
+</html>

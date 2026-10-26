@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SkyCounter UI</title>
+  <link rel="stylesheet" href="style.css?v=20261021-counter-minimal-anchor-1">
+</head>
+<body>
+  <main id="skycounter-overlay" aria-live="polite" aria-atomic="true">
+    <section class="notice-layout relic-card" data-layout="relic-card">
+      <div class="notice-art"><span data-field="fallback">◇</span><img data-field="icon" alt="" hidden></div>
+      <div class="notice-copy">
+        <span class="notice-eyebrow" data-field="eyebrow">ITEM ACQUIRED</span>
+        <strong data-field="title">Waiting for an item</strong>
+        <small data-field="details"></small>
+      </div>
+      <span class="notice-count" data-field="count"></span>
+    </section>
+
+    <section class="notice-layout loot-banner" data-layout="loot-banner">
+      <span class="banner-seal" aria-hidden="true">✦</span>
+      <div class="notice-art"><span data-field="fallback">◇</span><img data-field="icon" alt="" hidden></div>
+      <div class="notice-copy">
+        <span class="notice-eyebrow" data-field="eyebrow">ITEM ACQUIRED</span>
+        <strong data-field="title">Waiting for an item</strong>
+        <small data-field="details"></small>
+      </div>
+      <span class="notice-count" data-field="count"></span>
+    </section>
+
+    <section class="notice-layout quest-toast" data-layout="quest-toast">
+      <span class="quest-rule" aria-hidden="true"></span>
+      <div class="notice-art"><span data-field="fallback">◇</span><img data-field="icon" alt="" hidden></div>
+      <div class="quest-copy">
+        <span class="notice-eyebrow" data-field="eyebrow">ITEM ACQUIRED</span>
+        <strong data-field="title">Waiting for an item</strong>
+        <small data-field="details"></small>
+      </div>
+      <span class="quest-count notice-count" data-field="count"></span>
+    </section>
+
+    <section class="notice-layout minimal-pill" data-layout="minimal-pill">
+      <div class="notice-art"><span data-field="fallback">◇</span><img data-field="icon" alt="" hidden></div>
+      <div class="minimal-copy">
+        <span class="notice-eyebrow" data-field="eyebrow">ITEM ACQUIRED</span>
+        <strong data-field="title">Waiting for an item</strong>
+      </div>
+      <span class="notice-count" data-field="count"></span>
+    </section>
+  </main>
+  <script src="app.js?v=20261019-counter-duration-options-1"></script>
+</body>
+</html>

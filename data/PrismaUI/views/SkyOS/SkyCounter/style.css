@@ -1,0 +1,163 @@
+:root {
+  color-scheme: dark;
+  font-family: Manrope, "Segoe UI", sans-serif;
+  color: #eef4f5;
+  --accent: #5ccde0;
+  --glow: #31b9cf55;
+  --edge: #5ccde088;
+  --tint: #14242df5;
+  --gold: #f0c879;
+}
+
+* { box-sizing: border-box; }
+html, body { width: 100%; height: 100%; margin: 0; background: transparent; overflow: hidden; }
+body { pointer-events: none; }
+body[data-theme="frost"] { --accent: #acdfff; --glow: #70c7ff55; --edge: #acdfff99; --tint: #162a3bf5; --gold: #d7efff; }
+body[data-theme="imperial"] { --accent: #e5bc68; --glow: #e4aa3c55; --edge: #e3bd7188; --tint: #302516f5; --gold: #ffe0a0; }
+body[data-theme="arcane"] { --accent: #d1a0ff; --glow: #a66bff55; --edge: #bd8cff99; --tint: #24182ff5; --gold: #e3c7ff; }
+
+#skycounter-overlay {
+  position: fixed;
+  z-index: 1;
+  width: min(620px, 90vw);
+  opacity: 0;
+  transition: opacity .17s ease, transform .17s ease;
+  will-change: opacity, transform;
+}
+#skycounter-overlay.visible { opacity: 1; }
+.notice-layout { display: none; align-items: center; min-width: 0; }
+body[data-design="relic-card"] .relic-card,
+body[data-design="loot-banner"] .loot-banner,
+body[data-design="quest-toast"] .quest-toast,
+body[data-design="minimal-pill"] .minimal-pill { display: flex; }
+
+.notice-art {
+  display: grid;
+  place-items: center;
+  flex: none;
+  overflow: hidden;
+  color: var(--accent);
+  background: radial-gradient(circle at 50% 35%, color-mix(in srgb, var(--accent) 28%, #101820), #101820 72%);
+}
+.notice-art img { width: 100%; height: 100%; object-fit: contain; }
+.notice-copy, .quest-copy, .minimal-copy { display: grid; gap: 5px; min-width: 0; flex: 1; }
+.notice-eyebrow { color: var(--accent); font: 700 9px "DM Mono", monospace; letter-spacing: .19em; text-transform: uppercase; }
+.notice-copy strong, .quest-copy strong, .minimal-copy strong { overflow: hidden; font-size: 17px; text-overflow: ellipsis; white-space: nowrap; }
+.notice-copy small { overflow: hidden; color: #a6b4bf; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.notice-count { color: var(--gold); font: 700 13px "DM Mono", monospace; white-space: nowrap; }
+
+/* The relic card keeps the original illustrated item-card composition. */
+.relic-card {
+  gap: 15px;
+  padding: 14px 18px;
+  border: 1px solid var(--edge);
+  border-radius: 12px;
+  background: linear-gradient(110deg, #101820f5, var(--tint) 72%, #111b23f5);
+  box-shadow: 0 16px 48px #0009, inset 0 1px #ffffff16, 0 0 22px var(--glow);
+  backdrop-filter: blur(12px);
+}
+.relic-card .notice-art { width: 62px; height: 62px; border: 1px solid var(--edge); border-radius: 9px; font-size: 29px; }
+
+/* Loot banner is a broad announcement strip with a seal and separate quantity. */
+.loot-banner {
+  gap: 14px;
+  padding: 13px 18px 13px 13px;
+  border: 1px solid var(--edge);
+  border-left: 4px solid var(--gold);
+  border-radius: 5px 15px 15px 5px;
+  background: linear-gradient(100deg, #111a20f7, var(--tint) 58%, #10171cf5);
+  box-shadow: 0 12px 42px #000a, inset 0 1px #ffffff14;
+}
+.banner-seal { display: grid; place-items: center; width: 24px; height: 24px; flex: none; border: 1px solid var(--gold); border-radius: 50%; color: var(--gold); font-size: 13px; }
+.loot-banner .notice-art { width: 54px; height: 54px; border: 1px solid var(--edge); border-radius: 50%; font-size: 24px; }
+.loot-banner .notice-copy { padding-left: 4px; }
+.loot-banner .notice-count { align-self: flex-start; padding: 6px 9px; border: 1px solid var(--edge); border-radius: 999px; background: #06101588; }
+
+/* Quest toast uses a journal-like rule and a stacked title / metadata block. */
+.quest-toast {
+  gap: 14px;
+  padding: 12px 17px 12px 0;
+  border: 1px solid #d9c48b88;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #151715f7, #25261ff2 48%, #111619f7);
+  box-shadow: 0 14px 44px #000b, inset 0 0 28px #d8c17d0c;
+}
+.quest-rule { width: 5px; align-self: stretch; flex: none; background: linear-gradient(180deg, transparent, var(--gold) 18%, var(--gold) 82%, transparent); }
+.quest-toast .notice-art { width: 54px; height: 54px; border: 1px solid #d9c48b88; border-radius: 4px; background: radial-gradient(circle, #b39a562e, #111513 75%); font-size: 25px; }
+.quest-copy { gap: 4px; }
+.quest-copy .notice-eyebrow { color: var(--gold); }
+.quest-copy strong { font-family: Georgia, serif; font-size: 18px; font-weight: 600; letter-spacing: .025em; }
+.quest-copy small { overflow: hidden; color: #c3c0ad; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.quest-count { align-self: flex-end; padding-bottom: 2px; }
+
+/* Minimal pill is a compact HUD-style pickup line without a large card. */
+.minimal-pill {
+  display: none;
+  width: fit-content;
+  max-width: 100%;
+  gap: 10px;
+  padding: 7px 13px 7px 7px;
+  border: 1px solid #ffffff30;
+  border-radius: 999px;
+  background: #0b1115eF;
+  box-shadow: 0 8px 26px #0009, 0 0 16px var(--glow);
+}
+.minimal-pill .notice-art { width: 38px; height: 38px; border: 1px solid var(--edge); border-radius: 50%; font-size: 19px; }
+.minimal-copy { gap: 2px; }
+.minimal-copy .notice-eyebrow { font-size: 8px; letter-spacing: .16em; }
+.minimal-copy strong { font-size: 14px; }
+.minimal-pill .notice-count { padding-left: 10px; border-left: 1px solid #ffffff2b; font-size: 11px; }
+
+body[data-size="compact"] #skycounter-overlay { width: min(460px, 84vw); }
+body[data-size="compact"] .notice-layout { gap: 10px; padding: 9px 12px; }
+body[data-size="compact"] .notice-art { width: 46px; height: 46px; }
+body[data-size="compact"] .notice-copy strong, body[data-size="compact"] .quest-copy strong { font-size: 14px; }
+body[data-size="compact"] .notice-copy small, body[data-size="compact"] .quest-copy small { font-size: 9px; }
+body[data-size="compact"] .banner-seal { width: 20px; height: 20px; }
+body[data-size="compact"] .minimal-pill { padding: 5px 10px 5px 5px; }
+body[data-size="large"] #skycounter-overlay { width: min(760px, 94vw); }
+body[data-size="large"] .notice-layout { gap: 18px; padding: 18px 22px; }
+body[data-size="large"] .notice-art { width: 76px; height: 76px; }
+body[data-size="large"] .notice-copy strong, body[data-size="large"] .quest-copy strong { font-size: 20px; }
+body[data-size="large"] .minimal-pill .notice-art { width: 46px; height: 46px; }
+
+/* Let the compact layout establish its own anchor width so center/right positions
+   align to the visible pill rather than the full-width notice wrapper. */
+body[data-design="minimal-pill"] #skycounter-overlay { width: fit-content; max-width: min(620px, 90vw); }
+body[data-design="minimal-pill"][data-size="compact"] #skycounter-overlay { max-width: min(460px, 84vw); }
+body[data-design="minimal-pill"][data-size="large"] #skycounter-overlay { max-width: min(760px, 94vw); }
+
+body[data-position="top-center"] #skycounter-overlay { left: 50%; top: 5.5vh; transform: translate(-50%, -10px) scale(.985); }
+body[data-position="top-center"] #skycounter-overlay.visible { transform: translate(-50%, 0) scale(1); }
+body[data-position="center-center"] #skycounter-overlay { left: 50%; top: 50%; transform: translate(-50%, calc(-50% - 10px)) scale(.985); }
+body[data-position="center-center"] #skycounter-overlay.visible { transform: translate(-50%, -50%) scale(1); }
+body[data-position="top-left"] #skycounter-overlay { left: 24px; top: 5.5vh; transform: translateY(-10px) scale(.985); }
+body[data-position="top-left"] #skycounter-overlay.visible { transform: translateY(0) scale(1); }
+body[data-position="top-right"] #skycounter-overlay { right: 24px; top: 5.5vh; transform: translateY(-10px) scale(.985); }
+body[data-position="top-right"] #skycounter-overlay.visible { transform: translateY(0) scale(1); }
+body[data-position="center-left"] #skycounter-overlay { left: 24px; top: 50%; transform: translateY(calc(-50% - 10px)) scale(.985); }
+body[data-position="center-left"] #skycounter-overlay.visible { transform: translateY(-50%) scale(1); }
+body[data-position="center-right"] #skycounter-overlay { right: 24px; top: 50%; transform: translateY(calc(-50% - 10px)) scale(.985); }
+body[data-position="center-right"] #skycounter-overlay.visible { transform: translateY(-50%) scale(1); }
+body[data-position="bottom-left"] #skycounter-overlay { left: 24px; bottom: 5.5vh; transform: translateY(10px) scale(.985); }
+body[data-position="bottom-left"] #skycounter-overlay.visible { transform: translateY(0) scale(1); }
+body[data-position="bottom-center"] #skycounter-overlay { left: 50%; bottom: 5.5vh; transform: translate(-50%, 10px) scale(.985); }
+body[data-position="bottom-center"] #skycounter-overlay.visible { transform: translate(-50%, 0) scale(1); }
+body[data-position="bottom-right"] #skycounter-overlay { right: 24px; bottom: 5.5vh; transform: translateY(10px) scale(.985); }
+body[data-position="bottom-right"] #skycounter-overlay.visible { transform: translateY(0) scale(1); }
+
+@media (max-width: 560px) {
+  #skycounter-overlay { width: calc(100vw - 24px) !important; }
+  body[data-design="minimal-pill"] #skycounter-overlay { width: fit-content !important; max-width: calc(100vw - 24px); }
+  body[data-position$="left"] #skycounter-overlay { left: 12px; }
+  body[data-position$="right"] #skycounter-overlay { right: 12px; }
+  .notice-layout { gap: 10px; padding: 11px; }
+  .notice-art { width: 50px; height: 50px; }
+  .notice-copy strong, .quest-copy strong { font-size: 14px; }
+  .loot-banner { gap: 8px; padding: 10px; }
+  .loot-banner .notice-art { width: 42px; height: 42px; }
+  .banner-seal { width: 18px; height: 18px; font-size: 10px; }
+  .quest-toast { gap: 9px; padding: 9px 10px 9px 0; }
+  .quest-toast .notice-art { width: 42px; height: 42px; }
+  .quest-count { font-size: 10px; }
+}
